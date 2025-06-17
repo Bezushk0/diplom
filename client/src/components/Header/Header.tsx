@@ -1,5 +1,5 @@
-import { NavLink } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { useContext, useEffect, useState } from 'react';
 import { AppRoutes } from '../../enums/AppRoutes';
 import { useStateContext } from '../../state/state';
 
@@ -10,6 +10,8 @@ import { BurgerMenu } from '../Icons/BurgerMenu';
 
 import style from './Header.module.scss';
 import cn from 'classnames';
+import { AuthContext } from '../AuthContext';
+import { usePageError } from '../../hooks/usePageError';
 
 type GetLinkClass = (
   base: string,
@@ -25,6 +27,10 @@ export const getLinkClass: GetLinkClass = (base, active) => {
 export const Header = () => {
   const { state } = useStateContext();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { user, logout } = useContext(AuthContext);
+  const [error, setError] = usePageError();
+  const navigate = useNavigate();
+
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -159,11 +165,46 @@ export const Header = () => {
             </NavLink>
           </div>
 
+          <nav className='navbar'>
+            <div className='navbar-start'>
+              {user && (
+                <>
+                  <NavLink to='/profile' className='navbar-item'>Профіль</NavLink>
+                  <NavLink to='/users' className='navbar-item'>Користувачі</NavLink>
+                </>
+              )}
+            </div>
+
+            <div className='navbar-end'>
+              <div className='navbar-item'>
+                <div className='buttons'>
+                  {user ? (
+                    <button
+                      className='button is-light'
+                      onClick={() => {
+                        logout().then(() => navigate('/')).catch((e: { response: { data: { message: any; }; }; }) => setError(e.response?.data?.message));
+                      }}
+                    >
+                      Вийти
+                    </button>
+                  ) : (
+                    <>
+                      <Link to='/sign-up' className='button is-light'>Реєстрація</Link>
+                      <Link to='/login' className='button is-success'>Увійти</Link>
+                    </>
+                  )}
+                </div>
+              </div>
+            </div>
+          </nav>
+
           <div
             className={`${style.header__icons__wrapper__menu} ${style['hidden-on-desktop']}`}
           >
             <BurgerMenu isOpen={isMenuOpen} onClick={toggleMenu} />
           </div>
+
+
         </div>
       </div>
     </header>
