@@ -4,6 +4,7 @@ import { Loader } from "../components/Loader";
 import { ChangeName } from "../components/ChangeName";
 import { ChangePassword } from "../components/ChangePassword";
 import { ChangeEmailConfirmation } from "../components/ChangeEmailConfirmation";
+import { ChangePhone } from "../components/ChangePhone";
 
 export const ProfilePage = () => {
     const { user } = useContext(AuthContext);
@@ -16,8 +17,9 @@ export const ProfilePage = () => {
                 <>
                     <ChangeName />
                     <ChangePassword />
-                    <ChangeEmailConfirmation />    
-                </>   
+                    <ChangeEmailConfirmation />
+                    <ChangePhone />
+                </>
             )}
         </>
     );

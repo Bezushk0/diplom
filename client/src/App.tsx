@@ -57,21 +57,17 @@ function InnerApp() {
             <Route path={AppRoutes.PRODUCT_DETAILS(':category', ':productId')} element={<ProductDetailPage />} />
             <Route path={AppRoutes.FAVORITES} element={<FavoritesPage />} />
             <Route path={AppRoutes.CART} element={<CartPage />} />
+            <Route path='/' element={<RequireAuth children={undefined} />}>
+              <Route path='profile' element={<ProfilePage />} />
+            </Route>
+            <Route path='/sign-up' element={<RegistrationPage />} />
+            <Route path='/login' element={<LoginPage />} />
+            <Route path='/activate/:activationToken' element={<AccountActivationPage />} />
+            <Route path='/reset' element={<ResetPage />} />
+            <Route path='/reset/:resetToken' element={<ChangePasswordPage />} />
+
+            <Route path='*' element={<NotFoundPage />} />
           </Route>
-
-          <Route path='/sign-up' element={<RegistrationPage />} />
-          <Route path='/login' element={<LoginPage />} />
-          <Route path='/activate/:activationToken' element={<AccountActivationPage />} />
-          <Route path='/reset' element={<ResetPage />} />
-          <Route path='/reset/:resetToken' element={<ChangePasswordPage />} />
-
-          <Route path='/' element={<RequireAuth children={undefined} />}>
-            <Route path='profile' element={<ProfilePage />} />
-            <Route path='users' element={<UsersPage />} />
-          </Route>
-
-          {/* Not Found */}
-          <Route path='*' element={<NotFoundPage />} />
         </Routes>
 
         {error && <p className="notification is-danger">{error}</p>}

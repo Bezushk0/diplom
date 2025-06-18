@@ -22,7 +22,7 @@ const send = ({ email, subject, html }) => {
 };
 
 const sendActivationEmail = (name, email, token) => {
-  const href = `${process.env.CLIENT_HOST}/activate/${token}`;
+  const href = `${process.env.CLIENT_HOST}/gadgets-store/#/activate/${token}`;
 
   const html = `
   <h1>Activate account</h1>
@@ -33,7 +33,7 @@ const sendActivationEmail = (name, email, token) => {
 };
 
 const sendResetEmail = (name, email, token) => {
-  const href = `${process.env.CLIENT_HOST}/reset/${token}`;
+  const href = `${process.env.CLIENT_HOST}/gadgets-store/#/reset/${token}`;
 
   const html = `
   <h1>Reset your password</h1>

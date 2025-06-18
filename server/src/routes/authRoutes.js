@@ -11,6 +11,7 @@ const {
   updateUserName,
   changeAuthPass,
   changeEmail,
+  updateUserPhone,
 } = require('../controllers/authController');
 const { catchError } = require('../config/catchError');
 
@@ -27,6 +28,7 @@ authRouter.post('/reset', catchError(reset));
 authRouter.get('/reset/:resetToken', catchError(resetChecker));
 authRouter.patch('/update', catchError(updateUserName));
 authRouter.patch('/confirmChangeEmail', catchError(changeEmail));
+authRouter.patch('/users/:id', catchError(updateUserPhone));
 
 module.exports = {
   authRouter,

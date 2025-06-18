@@ -22,7 +22,7 @@ export const ResetPage = () => {
     const [error, setError] = usePageError('');
     const location = useLocation();
     const [visibleForm, setVisibleForm] = useState(true);
-    
+
     const initialEmail = location.state?.email || '';
 
     return (
@@ -74,7 +74,7 @@ export const ResetPage = () => {
                                         name="email"
                                         type="email"
                                         id="email"
-                                        placeholder="vasya@gmail.com"
+                                        placeholder="name@gmail.com"
                                         className={cn("input", {
                                         "is-danger": touched.email && errors.email,
                                         })}

@@ -27,7 +27,7 @@ const findUserById = (userId) => {
   return User.findOne({ where: { id: userId } });
 };
 
-const registerUser = async (name, email, password) => {
+const registerUser = async (name, email, password, phone) => {
   try {
     const activationToken = uuidv4();
     const existUser = await findByEmail(email);
@@ -42,6 +42,7 @@ const registerUser = async (name, email, password) => {
       name,
       email,
       password,
+      phone,
       activationToken,
     });
 

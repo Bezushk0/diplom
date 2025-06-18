@@ -21,7 +21,7 @@ export const ChangeName = () => {
     };
 
     return (
-        <>
+      <>
             <div className="personalInformation box personalInformation__wrapper">
                 <p>
                     Your name is: <b>{name}</b>

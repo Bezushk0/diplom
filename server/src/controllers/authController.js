@@ -49,6 +49,20 @@ function validateName(value) {
   }
 }
 
+const validatePhone = (phone) => {
+  if (!phone) {
+    return 'Phone is required';
+  }
+
+  const phoneRegex = /^\+?[0-9]{10,15}$/;
+
+  if (!phoneRegex.test(phone)) {
+    return 'Invalid phone number format';
+  }
+
+  return null;
+};
+
 const generateTokens = async (res, user) => {
   const normalizedUser = normalize(user);
   const accessToken = sign(normalizedUser);
@@ -73,29 +87,41 @@ const register = async (req, res, next) => {
   try {
     console.log('Received registration data:', req.body);
 
-    const { name, email, password } = req.body;
+    const { name, email, password, phone } = req.body;
 
     const errors = {
       name: validateName(name),
       email: validateEmail(email),
       password: validatePassword(password),
+      phone: validatePhone(phone),
     };
 
-    if (errors.email || errors.password || errors.name) {
+    if (errors.email || errors.password || errors.name || errors.phone) {
       throw new ApiError('Bad request', errors);
     }
 
-    const existingUser = await User.findOne({ where: { email } });
+    if (!phone) {
+      return res.status(400).json({ message: 'Phone is required' });
+    }
 
-    if (existingUser) {
+    const existingUserByEmail = await User.findOne({ where: { email } });
+    const existingUserByPhone = await User.findOne({ where: { phone } });
+
+    if (existingUserByEmail) {
       return res
         .status(409)
         .json({ message: 'User with this email already exists' });
     }
 
+    if (existingUserByPhone) {
+      return res
+        .status(409)
+        .json({ message: 'User with this phone number already exists' });
+    }
+
     const hashPass = await bcrypt.hash(password, 10);
 
-    await registerUser(name, email, hashPass);
+    await registerUser(name, email, hashPass, phone);
 
     res.status(201).json({ message: 'User registered successfully' });
   } catch (error) {
@@ -267,6 +293,33 @@ const updateUserName = async (req, res) => {
   }
 };
 
+const updateUserPhone = async (req, res) => {
+  const { id } = req.params;
+  const { phone } = req.body;
+
+  try {
+    const user = await User.findByPk(id);
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    const existingUser = await User.findOne({ where: { phone } });
+
+    if (existingUser && existingUser.id !== parseInt(id)) {
+      return res.status(409).json({ error: 'Phone already in use' });
+    }
+
+    user.phone = phone;
+    await user.save();
+
+    res.json(user);
+  } catch (error) {
+    console.error('Update phone error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
 const changeAuthPass = async (req, res) => {
   const { id, email, oldPassword, newPassword, newPasswordConfirmation } =
     req.body;
@@ -344,4 +397,5 @@ module.exports = {
   updateUserName,
   changeAuthPass,
   changeEmail,
+  updateUserPhone,
 };

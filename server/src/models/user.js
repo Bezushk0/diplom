@@ -18,6 +18,14 @@ const User = client.define(
       allowNull: false,
       unique: true,
     },
+    phone: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+      validate: {
+        is: /^\+?[0-9]{10,15}$/,
+      },
+    },
     password: {
       type: DataTypes.STRING,
       allowNull: false,

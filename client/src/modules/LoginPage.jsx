@@ -43,14 +43,19 @@ export const LoginPage = () => {
                 }}
                 validateOnMount={true}
                 onSubmit={({ email, password }) => {
-                    return login({ email, password })
-                        .then(() => {
-                            navigate('/profile');
-                        })
-                        .catch((error) => {
-                            setError(error.response?.data?.message);
-                        })
-                }}
+                  return login({ email, password })
+                      .then(() => {
+                          navigate('/profile');
+                      })
+                      .catch((error) => {
+                          const msg = error.response?.data?.message;
+                          if (msg === "Please check your inbox and activate your email") {
+                              setError("Ви маєте активувати акаунт через посилання у листі, надісланому на вашу пошту.");
+                          } else {
+                              setError(msg || "Сталася помилка під час входу.");
+                          }
+                      })
+              }}
             >
                 {({ touched, errors, isSubmitting, values }) => (
                     <Form className="box">
@@ -68,7 +73,7 @@ export const LoginPage = () => {
                                     id='email'
                                     placeholder='name@gmail.com'
                                     className={cn('input', {
-                                        'is-danger': touched.email && error.email
+                                        'is-danger': touched.email && errors.email
                                     })}
                                 />
 
@@ -76,7 +81,7 @@ export const LoginPage = () => {
                                     <i className="fa fa-envelope"></i>
                                 </span>
 
-                                {touched.email && error.email && (
+                                {touched.email && errors.email && (
                                     <span className="icon is-small is-right has-text-danger">
                                         <i className="fas fa-exclamation-triangle"></i>
                                     </span>
@@ -101,7 +106,7 @@ export const LoginPage = () => {
                                     id='password'
                                     placeholder='********'
                                     className={cn('input', {
-                                        'is-danger': touched.password && error.password
+                                        'is-danger': touched.password && errors.password
                                     })}
                                 />
 
@@ -109,7 +114,7 @@ export const LoginPage = () => {
                                     <i className="fa fa-envelope"></i>
                                 </span>
 
-                                {touched.password && error.password && (
+                                {touched.password && errors.password && (
                                     <span className="icon is-small is-right has-text-danger">
                                         <i className="fas fa-exclamation-triangle"></i>
                                     </span>

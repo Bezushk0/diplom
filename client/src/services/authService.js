@@ -1,13 +1,19 @@
 import { authClient } from "../http/authClient";
 
-function register({ name, email, password }) {
-  console.log('Sending registration request:', { name, email, password });
-  return authClient.post('/registration', { name, email, password });
+function register({ name, email, password, phone }) {
+  console.log('Sending registration data:', { name, email, password, phone });
+  return authClient.post('/registration', {
+    name,
+    email,
+    password,
+    phone,
+  });
 }
 
-function login({ name, email, password }) {
-    return authClient.post('/login', { name, email, password });
+function login({ email, password }) {
+  return authClient.post('/login', { email, password });
 }
+
 
 function logout() {
     return authClient.post('/logout');
@@ -37,8 +43,8 @@ function validateToken(resetToken) {
     return authClient.get(`/reset/${resetToken}`)
 }
 
-function updateInformation(user) {
-  return authClient.patch(`/update`, user);
+function updateInformation({ id, phone }) {
+  return authClient.patch(`/users/${id}`, { phone });
 }
 
 function changeAuthPassword({

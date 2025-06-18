@@ -166,11 +166,11 @@ export const Header = () => {
           </div>
 
           <nav className='navbar'>
+
             <div className='navbar-start'>
               {user && (
                 <>
-                  <NavLink to='/profile' className='navbar-item'>Профіль</NavLink>
-                  <NavLink to='/users' className='navbar-item'>Користувачі</NavLink>
+                  <NavLink to='/profile' className='navbar-item'>Profile</NavLink>
                 </>
               )}
             </div>
@@ -185,12 +185,12 @@ export const Header = () => {
                         logout().then(() => navigate('/')).catch((e: { response: { data: { message: any; }; }; }) => setError(e.response?.data?.message));
                       }}
                     >
-                      Вийти
+                      Exit
                     </button>
                   ) : (
                     <>
-                      <Link to='/sign-up' className='button is-light'>Реєстрація</Link>
-                      <Link to='/login' className='button is-success'>Увійти</Link>
+                      <Link to='/sign-up' className='button is-light'>Registration</Link>
+                      <Link to='/login' className='button is-success'>Log in</Link>
                     </>
                   )}
                 </div>

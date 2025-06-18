@@ -12,6 +12,7 @@ interface User {
   id: number;
   email: string;
   name: string;
+  phone: number;
 }
 
 interface AuthContextType {
@@ -80,6 +81,23 @@ export const AuthProvider = ({ children }: Props) => {
     setUser(user);
   }
 
+  const updateUserPhone = async (phone: string) => {
+    if (!user) throw new Error('User not authenticated');
+
+    console.log('Updating user phone:', user.id, phone);
+
+    const response = await authService.updateInformation({
+      id: user.id,
+      phone,
+    });
+
+    console.log('Update response:', response);
+
+    setUser(response.data ? response.data : response); // залежить від axios чи fetch
+
+    return response.data ? response.data : response;
+  };
+
   const value = useMemo(
     () => ({
       isChecked,
@@ -91,6 +109,7 @@ export const AuthProvider = ({ children }: Props) => {
       reset,
       change,
       changeEmailAuth,
+      updateUserPhone,
     }),
     [user, isChecked]
   );

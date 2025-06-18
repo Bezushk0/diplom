@@ -34,6 +34,17 @@ const validatePassword = (value) => {
     }
 }
 
+const validatePhone = (value) => {
+  if (!value) {
+    return 'Phone is required';
+  }
+
+  const phonePattern = /^\+?\d{10,15}$/;
+  if (!phonePattern.test(value)) {
+    return 'Phone number is not valid';
+  }
+};
+
 export const RegistrationPage = () => {
     const [error, setError] = usePageError('');
     const [registered, setRegistered] = useState(false);
@@ -54,13 +65,14 @@ export const RegistrationPage = () => {
                     email: '',
                     name: '',
                     password: '',
+                    phone: '',
                 }}
                 validateOnMount={true}
-                onSubmit={({ email, password, name }, formikHelpers) => {
+                onSubmit={({ email, password, name, phone }, formikHelpers) => {
                     formikHelpers.setSubmitting(true);
 
                     authService
-                        .register({ email, password, name })
+                        .register({ email, password, name, phone })
                         .then(() => {
                             setRegistered(true);
                         })
@@ -86,6 +98,7 @@ export const RegistrationPage = () => {
                                 formikHelpers.setFieldError("email", data.errors.email);
                                 formikHelpers.setFieldError("password", data.errors.password);
                                 formikHelpers.setFieldError("name", data.errors.name);
+                                formikHelpers.setFieldError("phone", data.errors.phone);
                             }
 
                             if (data.message) {
@@ -197,13 +210,46 @@ export const RegistrationPage = () => {
                             </div>
                         </div>
 
+                        <div className="field">
+                        <label htmlFor="phone" className="label">
+                          Phone Number
+                        </label>
+
+                        <div className="control has-icons-left has-icons-right">
+                          <Field
+                            validate={validatePhone}
+                            name='phone'
+                            type='tel'
+                            id='phone'
+                            placeholder='+380123456789'
+                            className={cn('input', {
+                              'is-danger': touched.phone && errors.phone
+                            })}
+                          />
+
+                          <span className="icon is-small is-left">
+                            <i className="fas fa-phone"></i>
+                          </span>
+
+                          {touched.phone && errors.phone && (
+                            <span className="icon is-small is-right has-text-danger">
+                              <i className="fas fa-exclamation-triangle"></i>
+                            </span>
+                          )}
+                        </div>
+
+                        {touched.phone && errors.phone && (
+                          <p className="help is-danger">{errors.phone}</p>
+                        )}
+                      </div>
+
                         <div className="field field__btn">
                             <button
                                 type="submit"
                                 className={cn("button is-success has-text-weight-bold", {
                                     "is-loading": isSubmitting,
                                 })}
-                                disabled={isSubmitting || errors.email || errors.password}
+                                disabled={isSubmitting || errors.email || errors.password || errors.phone}
                             >
                                 Sign up
                             </button>
