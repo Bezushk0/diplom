@@ -12,7 +12,7 @@ export const Footer: React.FC = () => {
           <ul className={style.footer__nav_list}>
             <li className={style.footer__nav_item}>
               <a href="#" className={style.footer__nav_link}>
-                Github
+                Apple
               </a>
             </li>
             <li>
