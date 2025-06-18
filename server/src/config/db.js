@@ -1,8 +1,8 @@
 /* eslint-disable no-console */
 require('dotenv').config();
 
-// const { Sequelize } = require('sequelize');
-// const pg = require('pg');
+const { Sequelize } = require('sequelize');
+const pg = require('pg');
 
 // const client = new Sequelize(
 //   process.env.DB_NAME,
